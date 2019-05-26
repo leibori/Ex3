@@ -18,7 +18,7 @@ namespace Ex3.Models
         {
             writer.WriteStartElement("Information");
             writer.WriteElementString("Lat", this.Lat.ToString());
-            writer.WriteElementString("Lat", this.Lon.ToString());
+            writer.WriteElementString("Lon", this.Lon.ToString());
             writer.WriteElementString("Hight", this.Hight.ToString());
             writer.WriteElementString("Dircation", this.Dircation.ToString());
             writer.WriteElementString("Speed", this.Speed.ToString());
