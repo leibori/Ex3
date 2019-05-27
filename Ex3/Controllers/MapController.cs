@@ -44,7 +44,8 @@ namespace Ex3.Controllers
             else
             {
                 InfoModel.fileName = param1
-                InfoModel.timesPerSec = param2
+
+                Session["timesPerSecond"] = timesPerSecond;
             }
 
             return View();
@@ -55,7 +56,8 @@ namespace Ex3.Controllers
         {
             InfoModel.Instance.ip = ip;
             InfoModel.Instance.port = port.ToString();
-            InfoModel.Instance.time = timesPerSec;
+
+            Session["timesPerSecond"] = timesPerSecond;
 
             return View();
         }
