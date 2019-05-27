@@ -62,4 +62,30 @@ namespace Ex3.Controllers
             return View();
         }
     }
+
+    [HttpPost]
+        public string getInfo()
+        {
+            var info = InfoModel.Instance.Information;
+
+            return ToXml(info);
+        }
+
+        private string ToXml(Information information)
+        {
+            //Initiate XML stuff
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            XmlWriter writer = XmlWriter.Create(sb, settings);
+
+            writer.WriteStartDocument();
+            writer.WriteStartElement("AllInformation");
+
+            information.ToXml(writer);
+
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            return sb.ToString();
+        }
 }

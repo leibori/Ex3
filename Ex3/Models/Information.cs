@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,10 +22,7 @@ namespace Ex3.Models
             writer.WriteElementString("Hight", this.Hight.ToString());
             writer.WriteElementString("Dircation", this.Dircation.ToString());
             writer.WriteElementString("Speed", this.Speed.ToString());
-
-        
             writer.WriteEndElement();
         }
-
     }
 }
