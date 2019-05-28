@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Web;
 
 namespace Ex3.Models
@@ -25,10 +28,43 @@ namespace Ex3.Models
         public string ip { get; set; }
         public string port { get; set; }
         public int time { get; set; }
+        public int timesPerSec { get; set; }
+       
 
         public InfoModel()
         {
             Information = new Information();
+        }
+       
+        public const string SCENARIO_FILE = "~/App_Data/{0}.txt";           // The Path of the Secnario
+
+        public void ReadData(string name)
+        {
+            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
+            if (!File.Exists(path))
+            {
+                /*Employee.FirstName = name;
+                Employee.LastName = name;
+                Employee.Salary = 500;*/
+
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
+                {
+                    file.WriteLine(Information.Lat);
+                    file.WriteLine(Information.Lon);
+                    file.WriteLine(Information.Rudder);
+                    file.WriteLine(Information.Throttle);
+
+                }
+            }
+            else
+            {
+                string[] lines = System.IO.File.ReadAllLines(path);        // reading all the lines of the file
+                Information.Lat = int.Parse(lines[0]);
+                Information.Lon = int.Parse(lines[1]);
+                Information.Rudder = int.Parse(lines[2]);
+                Information.Throttle = int.Parse(lines[3]);
+
+            }
         }
     }
 }
