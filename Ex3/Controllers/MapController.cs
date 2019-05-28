@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Ex3.Models
+using Ex3.Models;
 
 namespace Ex3.Controllers
 {
@@ -38,14 +38,13 @@ namespace Ex3.Controllers
         {
             if (isIp(param1))
             {
-                InfoModel.Instance.ip = ip;
-                InfoModel.Instance.port = port.ToString();
+                InfoModel.Instance.ip = param1;
+                InfoModel.Instance.port = param2.ToString();
             }
             else
             {
-                InfoModel.fileName = param1
-
-                Session["timesPerSecond"] = timesPerSecond;
+                InfoModel.fileName = param1;
+                Session["timesPerSec"] = param2;
             }
 
             return View();
@@ -57,7 +56,7 @@ namespace Ex3.Controllers
             InfoModel.Instance.ip = ip;
             InfoModel.Instance.port = port.ToString();
 
-            Session["timesPerSecond"] = timesPerSecond;
+            Session["timesPerSec"] = timesPerSec;
 
             return View();
         }
