@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ex3.Models;
+using System.Xml;
+using System.Text;
 
 namespace Ex3.Controllers
 {
@@ -17,7 +19,7 @@ namespace Ex3.Controllers
 
         public bool isIp(string param)
         {
-            string[] data = param.split('.');
+            string[] data = param.Split('.');
             if (data.Length != 4) { return false; }
 
              int parsedInt = 0;
@@ -43,7 +45,7 @@ namespace Ex3.Controllers
             }
             else
             {
-                InfoModel.fileName = param1;
+                InfoModel.Instance.fileName = param1;
                 Session["timesPerSec"] = param2;
             }
 
@@ -60,9 +62,7 @@ namespace Ex3.Controllers
 
             return View();
         }
-    }
-
-    [HttpPost]
+        [HttpPost]
         public string getInfo()
         {
             var info = InfoModel.Instance.Information;
@@ -87,4 +87,7 @@ namespace Ex3.Controllers
             writer.Flush();
             return sb.ToString();
         }
+    }
+
+   
 }
