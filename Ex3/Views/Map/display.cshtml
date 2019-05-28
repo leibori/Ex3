@@ -18,22 +18,57 @@
 
 <div>
     <canvas id="page_canvas" width="0" height="0"></canvas>
-    <img id="map" src="~/map.png" alt="world map">
+    <img id="map" src="~/map.png">
 </div>
 
 <script>
     src = "http://code.jquery.com/jquery-1.11.0.min.js"
 
-    var IntervalTime = @Session["time"] * 1000
+    var IntervalTime = @Session["timesPerSec"] * 1000
+    var last_lat = null;
+    var last_lon = null;
+    var canvas = document.getElementById("page_canvas");
+    var canvas_context = canvas.getContext("2d");
+    var image = document.getElementById("map");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas_context.fillStyle = "#f00000";
+    canvas_context.lineWidth = "5";
+    canvas_context.strokeStyle = "red";
+
     myTimer = (function () {
         $.post( "@Url.Action("GetInfo")").done(function (xml) {
-                var xmlDoc = $.parseXML( xml ),
-                $xml = $( xmlDoc ),
-                FirstName = $xml.find( "Lat" ).text();
-                LastName = $xml.find( "Lon" ).text();
+            var xmlDoc = $.parseXML( xml ),
+            $xml = $( xmlDoc ),
+            lon = $xml.find("Lon").text();
+            lat = $xml.find("Lat").text();
 
-                var canvas = document.getElementById("page_canvas");
-                var canvas_context = canvas.getContext("2d");
+            lon_val = parseFloat(lon.valueOf());
+            normalized_lon = ((lat_val + 180) / (2 * 180)) * canvas.width;
+
+            lat_val = parseFloat(lat.valueOf());
+            normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
+
+            if (last_lat == null && last_lon == null) {
+                canvas_context.arc(normalized_lon, normalized_lat, 10, 0, 2 * Math.PI)
+                canvas_context.fill();
+            } else {
+                canvas_context.beginPath();
+                canvas_context.moveTo(last_lo, last_lat);
+                canvas_context.lineTo(normalized_lon, normalized_lat);
+                canvas_context.stroke();
+            }
+
+            last_lon = normalized_lon;
+            last_lat = normalized_lat;
         });
     });
+
+
+
+    window.onload = function () {
+        canvas_context.translate(0, 0);
+        ctx.drawImage(img, 0, 0, unage.width, image.height, 0, 0, canvas.width, canvas.height);
+    };
 </script>
