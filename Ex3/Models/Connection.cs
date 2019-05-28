@@ -4,75 +4,63 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Ex3.Models
 {
     public class Connection
     {
-        private TcpClient client;
-        private BinaryWriter writer;
-        public bool isConnected = false;
-        #region Singleton
-        private static Connection _Instance = null;
-        //singelton Command
+        private TcpClient clientTcp;
+        private NetworkStream stream;
+        private StreamReader reader;
+
+        public bool IsConnact { set; get; } = false;
+
+        #region SingleTon
+        private static Connection m_Instance = null;
         public static Connection Instance
         {
             get
             {
-                if (_Instance == null)
-                {
-                    _Instance = new Connection();
-                }
-                return _Instance;
+                if (m_Instance == null)
+                    m_Instance = new Connection();
+                return m_Instance;
             }
+        }
+        #endregion
+
+        public void Connect(int port, string serverIp)
+        {
+            clientTcp = new TcpClient();
+            while (!clientTcp.Connected)
+            {
+                try { clientTcp.Connect(IPAddress.Parse(serverIp), port); }
+                catch (Exception) { }
+            }
+            stream = clientTcp.GetStream();
+            IsConnact = true;
+            reader = new StreamReader(stream);
+            Console.WriteLine("u are connacted");
         }
 
-        public bool Connected { get; internal set; }
-        #endregion
-        //connect to server
-        public void ComConnect(string ip, int port)
+        public string Get(string path)
         {
-            client = new TcpClient();
-            IPEndPoint ipEndPo = new IPEndPoint(IPAddress.Parse(ip), port);
-            //keep logging
-            while (!client.Connected)
-            {
-                try { client.Connect(ipEndPo); }
-                catch (Exception exp)
-                {
-                    //exception
-                    Console.WriteLine("pay attention to: {0}", exp.ToString());
-                }
-            }
-            writer = new BinaryWriter(client.GetStream());
-            Console.WriteLine("Connected");
-            //update connect
-            isConnected = true;
+            string msg = "get" + " " + path + "\r\n";
+            byte[] massegeToSend = ASCIIEncoding.ASCII.GetBytes(msg);
+            stream.Write(massegeToSend, 0, massegeToSend.Length);
+
+            string commnadLine = reader.ReadLine().Split('\'')[1];
+            return commnadLine;
         }
-        //send commands 
-        public void ComSend(string message)
+
+
+        public void Close()
         {
-            if (string.IsNullOrEmpty(message)) return;
-            string[] commendsList = message.Split('\n');
-            //go over commends
-            foreach (string s in commendsList)
-            {
-                string indiCom = s + "\r\n";
-                writer.Write(System.Text.Encoding.ASCII.GetBytes(indiCom));
-                System.Threading.Thread.Sleep(2000);
-            }
-        }
-        //clear instance
-        public void ComClear()
-        {
-            _Instance = null;
-        }
-        //close 
-        public void ComClose()
-        {
-            client.Close();
-            writer.Close();
+            clientTcp.Close();
+            stream.Close();
+            IsConnact = false;
         }
     }
 }

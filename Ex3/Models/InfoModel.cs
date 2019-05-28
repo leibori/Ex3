@@ -24,9 +24,9 @@ namespace Ex3.Models
             }
         }
         public Information Information { get; private set; }
-        public string file { get; set; }
+        public string fileName { get; set; }
         public string ip { get; set; }
-        public string port { get; set; }
+        public int port { get; set; }
         public int time { get; set; }
         public int timesPerSec { get; set; }
        

@@ -34,17 +34,27 @@ namespace Ex3.Controllers
 
             return true;
         }
-
+        static string lonPath = "position/longitude-deg";
+        static string latPath = "position/latitude-deg";
         [HttpGet]
-        public ActionResult display(string param1, int param2)
+        public ActionResult display(string param1, int param2, int? param3)
         {
             if (isIp(param1))
             {
-                InfoModel.Instance.ip = param1;
-                InfoModel.Instance.port = param2.ToString();
+                Connection.Instance.Connect(param2, param1);
+                ViewBag.lat = Connection.Instance.Get(lonPath);
+                ViewBag.lon = Connection.Instance.Get(latPath);
+                /*InfoModel.Instance.ip = param1;
+                InfoModel.Instance.port = param2;*/
+
+                if (param3 != null) { Session["timesPerSec"] = param3; }
+                else { Session["timesPerSec"] = 0; }
             }
             else
             {
+                Connection.Instance.Connect(param2, param1);
+                ViewBag.lat = Connection.Instance.Get(lonPath);
+                ViewBag.lon = Connection.Instance.Get(latPath);
                 InfoModel.Instance.fileName = param1;
                 Session["timesPerSec"] = param2;
             }
@@ -52,16 +62,6 @@ namespace Ex3.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult display(string ip, int port, int timesPerSec)
-        {
-            InfoModel.Instance.ip = ip;
-            InfoModel.Instance.port = port.ToString();
-
-            Session["timesPerSec"] = timesPerSec;
-
-            return View();
-        }
         [HttpPost]
         public string getInfo()
         {
