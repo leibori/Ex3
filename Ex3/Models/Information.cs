@@ -10,18 +10,16 @@ namespace Ex3.Models
     {
         public int Lat { get; set; }
         public int Lon { get; set; }
-        public int Hight { get; set; }
-        public int Dircation { get; set; }
-        public int Speed { get; set; }
+        public int Throttle { get; set; }
+        public int Rudder { get; set; }
 
         public void ToXml(XmlWriter writer)
         {
             writer.WriteStartElement("Information");
             writer.WriteElementString("Lat", this.Lat.ToString());
             writer.WriteElementString("Lon", this.Lon.ToString());
-            writer.WriteElementString("Hight", this.Hight.ToString());
-            writer.WriteElementString("Dircation", this.Dircation.ToString());
-            writer.WriteElementString("Speed", this.Speed.ToString());
+            writer.WriteElementString("Throttle", this.Throttle.ToString());
+            writer.WriteElementString("Rudder", this.Rudder.ToString());
             writer.WriteEndElement();
         }
     }
