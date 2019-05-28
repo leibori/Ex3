@@ -65,10 +65,11 @@
         });
     });
 
-
+    setInterval(myTimer, IntervalTime);
+    myTimer();
 
     window.onload = function () {
         canvas_context.translate(0, 0);
-        ctx.drawImage(img, 0, 0, unage.width, image.height, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
     };
 </script>
