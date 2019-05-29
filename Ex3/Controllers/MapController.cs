@@ -53,8 +53,8 @@ namespace Ex3.Controllers
             else
             {
                 Connection.Instance.Connect(param2, param1);
-                ViewBag.lat = Connection.Instance.GetPath(lonPath);
-                ViewBag.lon = Connection.Instance.GetPath(latPath);
+              /*  ViewBag.lat = Connection.Instance.GetPath(lonPath);
+                ViewBag.lon = Connection.Instance.GetPath(latPath);*/
                 InfoModel.Instance.fileName = param1;
                 Session["timesPerSec"] = param2;
             }
