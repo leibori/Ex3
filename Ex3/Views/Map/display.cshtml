@@ -18,6 +18,7 @@
 
 <div>
     <canvas id="page_canvas" width="0" height="0"></canvas>
+    <img id="map" src="../../Images/export-map-share.png">
 </div>
 
 <script>
@@ -28,6 +29,8 @@
     var last_lon = null;
     var canvas = document.getElementById("page_canvas");
     var canvas_context = canvas.getContext("2d");
+    var image = document.getElementById("map");
+
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -68,5 +71,7 @@
 
     window.onload = function () {
         canvas_context.translate(0, 0);
+        ctx.drawImage(image, 0, 0, image.width, image.height);
+
     };
 </script>

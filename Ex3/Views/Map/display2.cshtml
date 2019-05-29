@@ -18,7 +18,7 @@
 
 <div>
     <canvas id="page_canvas" width="0" height="0"></canvas>
-    <img id="map" src="~/map.png">
+    <img id="map" src="../../Images/export-map-share.png">
 </div>
 
 <script>
@@ -70,6 +70,6 @@
 
     window.onload = function () {
         canvas_context.translate(0, 0);
-        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, image.width, image.height);
     };
 </script>

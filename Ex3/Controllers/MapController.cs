@@ -81,12 +81,12 @@ namespace Ex3.Controllers
             info.Rudder = int.Parse(Connection.Instance.GetPath(rudderPath));
             info.Throttle = int.Parse(Connection.Instance.GetPath(throttlePath));
 
-            ToXml(info);
+            InfoModel.Instance.ToXml(info);
 
             return;
         }
 
-        private void ToXml(Information information)
+        /*private void ToXml(Information information)
         {
             //Initiate XML stuff
             StringBuilder sb = new StringBuilder();
@@ -103,5 +103,6 @@ namespace Ex3.Controllers
             writer.Flush();
             return;
         }
+        */
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Web;
+using System.Xml;
 
 namespace Ex3.Models
 {
@@ -65,6 +67,23 @@ namespace Ex3.Models
                 Information.Throttle = int.Parse(lines[3]);
 
             }
+        }
+        public void ToXml(Information information)
+        {
+            //Initiate XML stuff
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            XmlWriter writer = XmlWriter.Create(sb, settings);
+
+            writer.WriteStartDocument();
+            writer.WriteStartElement("AllInformation");
+
+            information.ToXml(writer);
+
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            return;
         }
     }
 }
