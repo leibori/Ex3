@@ -42,8 +42,8 @@ namespace Ex3.Controllers
             if (isIp(param1))
             {
                 Connection.Instance.Connect(param2, param1);
-                ViewBag.lat = Connection.Instance.Get(lonPath);
-                ViewBag.lon = Connection.Instance.Get(latPath);
+                ViewBag.lat = Connection.Instance.GetPath(lonPath);
+                ViewBag.lon = Connection.Instance.GetPath(latPath);
                 /*InfoModel.Instance.ip = param1;
                 InfoModel.Instance.port = param2;*/
 
@@ -53,8 +53,8 @@ namespace Ex3.Controllers
             else
             {
                 Connection.Instance.Connect(param2, param1);
-                ViewBag.lat = Connection.Instance.Get(lonPath);
-                ViewBag.lon = Connection.Instance.Get(latPath);
+                ViewBag.lat = Connection.Instance.GetPath(lonPath);
+                ViewBag.lon = Connection.Instance.GetPath(latPath);
                 InfoModel.Instance.fileName = param1;
                 Session["timesPerSec"] = param2;
             }

@@ -16,7 +16,7 @@ namespace Ex3.Models
         private NetworkStream stream;
         private StreamReader reader;
 
-        public bool IsConnact { set; get; } = false;
+        public bool IsCon { set; get; } = false;
 
         #region SingleTon
         private static Connection m_Instance = null;
@@ -31,36 +31,34 @@ namespace Ex3.Models
         }
         #endregion
 
-        public void Connect(int port, string serverIp)
+        public void Connect(int port, string ip)
         {
             clientTcp = new TcpClient();
             while (!clientTcp.Connected)
             {
-                try { clientTcp.Connect(IPAddress.Parse(serverIp), port); }
+                try { clientTcp.Connect(IPAddress.Parse(ip), port); }
                 catch (Exception) { }
             }
-            stream = clientTcp.GetStream();
-            IsConnact = true;
-            reader = new StreamReader(stream);
-            Console.WriteLine("u are connacted");
+            IsCon = true;
+            reader = new StreamReader(clientTcp.GetStream());
+            Console.WriteLine("connacted");
         }
 
-        public string Get(string path)
+        public string GetPath(string path)
         {
             string msg = "get" + " " + path + "\r\n";
             byte[] massegeToSend = ASCIIEncoding.ASCII.GetBytes(msg);
             stream.Write(massegeToSend, 0, massegeToSend.Length);
 
-            string commnadLine = reader.ReadLine().Split('\'')[1];
-            return commnadLine;
+            string SplitCommMess = reader.ReadLine().Split('\'')[1];
+            return SplitCommMess;
         }
 
-
-        public void Close()
+        public void Disconnect()
         {
             clientTcp.Close();
             stream.Close();
-            IsConnact = false;
+            IsCon = false;
         }
     }
 }
