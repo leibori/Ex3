@@ -15,6 +15,7 @@ namespace Ex3.Models
         private TcpClient clientTcp;
         private NetworkStream stream;
         private StreamReader reader;
+        
 
         public bool IsCon { set; get; } = false;
 
@@ -33,14 +34,16 @@ namespace Ex3.Models
 
         public void Connect(int port, string ip)
         {
+           // IPEndPoint ipe = new IPEndPoint(IPAddress.Parse(ip), port);
             clientTcp = new TcpClient();
             while (!clientTcp.Connected)
             {
-                try { clientTcp.Connect(IPAddress.Parse(ip), port); }
+                try { clientTcp.Connect(IPAddress.Parse(ip),port); }
                 catch (Exception) { }
             }
+            stream = clientTcp.GetStream();
             IsCon = true;
-            reader = new StreamReader(clientTcp.GetStream());
+            reader = new StreamReader(stream);
             Console.WriteLine("connacted");
         }
 

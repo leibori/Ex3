@@ -6,7 +6,19 @@
 
 <html>
 <head>
-    <link href="../../Images/Style.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            margin: 0;
+            background-image: url("../../Images/export-map-share.png");
+            background-attachment: fixed;
+            height: 100%;
+            width: 100%;
+            background-position: top;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+    @* <link href="../../Images/Style.css" rel="stylesheet" type="text/css" />*@
     <title></title>
 </head>
 <body>
@@ -18,7 +30,7 @@
 
 <div>
     <canvas id="page_canvas" width="0" height="0"></canvas>
-    <img id="map" src="../../Images/export-map-share.png">
+    @**<img id="map" src="../../Images/export-map-share.png">*@
 </div>
 
 <script>
@@ -34,7 +46,7 @@
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    canvas_context.fillStyle = "#f00000";
+    canvas_context.fillStyle = "black";
     canvas_context.lineWidth = "5";
     canvas_context.strokeStyle = "red";
 
@@ -55,7 +67,9 @@
             normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
 
             if (last_lat == null && last_lon == null) {
-                canvas_context.arc(normalized_lon, normalized_lat, 10, 0, 2 * Math.PI)
+                canvas_context.beginPath();
+                canvas_context.arc(normalized_lon, normalized_lat, 100, 0, 2 * Math.PI)
+                canvas_context.stroke();
                 canvas_context.fill();
             } else {
                 canvas_context.beginPath();

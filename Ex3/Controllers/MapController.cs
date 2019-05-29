@@ -42,7 +42,7 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult display(string param1, int param2, int? param3)
         {
-            if (isIp(param1))
+            /*if (isIp(param1))
             {
                 Connection.Instance.Connect(param2, param1);
                 Session["lat"] = Connection.Instance.GetPath(latPath);
@@ -55,19 +55,20 @@ namespace Ex3.Controllers
             {
                 /*Connection.Instance.Connect(param2, param1);
                 ViewBag.lat = Connection.Instance.GetPath(lonPath);
-                ViewBag.lon = Connection.Instance.GetPath(latPath);*/
+                ViewBag.lon = Connection.Instance.GetPath(latPath);
                 InfoModel.Instance.fileName = param1;
                 Session["timesPerSec"] = param2;
-            }
+            }*/
 
+            Session["timesPerSec"] = 1;
             return View();
         }
 
         [HttpPost]
         public void getInfo()
         {
-            Session["lat"] = Connection.Instance.GetPath(latPath);
-            Session["lon"] = Connection.Instance.GetPath(lonPath);
+            Session["lat"] = 45; // Connection.Instance.GetPath(latPath);
+            Session["lon"] = 90; // Connection.Instance.GetPath(lonPath);
 
             return;
         }
