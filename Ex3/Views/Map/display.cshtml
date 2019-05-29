@@ -40,10 +40,13 @@
 
     myTimer = (function () {
         $.post( "@Url.Action("GetInfo")").done(function (xml) {
-            var xmlDoc = $.parseXML( xml ),
+            /*var xmlDoc = $.parseXML( xml ),
             $xml = $( xmlDoc ),
             lon = $xml.find("Lon").text();
-            lat = $xml.find("Lat").text();
+            lat = $xml.find("Lat").text();*/
+
+            lon = @Session["lon"];
+            lat = @Session["lat"];
 
             lon_val = parseFloat(lon.valueOf());
             normalized_lon = ((lat_val + 180) / (2 * 180)) * canvas.width;
@@ -69,9 +72,9 @@
     setInterval(myTimer, IntervalTime);
     myTimer();
 
-    window.onload = function () {
+    /*window.onload = function () {
         canvas_context.translate(0, 0);
         ctx.drawImage(image, 0, 0, image.width, image.height);
 
-    };
+    };*/
 </script>
