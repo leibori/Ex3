@@ -12,11 +12,11 @@ namespace Ex3.Models
 {
     public class Connection
     {
-        TcpClient client;
-        BinaryWriter writer;
-        BinaryReader reader;
-        private TcpListener listener;
-        public bool isConnected = false;
+        private TcpClient client;
+        private NetworkStream netStream;
+        private StreamReader netReader;
+
+        public bool IsCon = false;
 
         #region Singleton
         private static Connection m_Instance = null;
@@ -40,41 +40,36 @@ namespace Ex3.Models
 
         public void Connect(int port, string ip)
         {
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ip), port);
             client = new TcpClient();
-
-            // We try to connect again and again util the connection is made
             while (!client.Connected)
             {
-                try { client.Connect(ep); }
+                try { client.Connect(IPAddress.Parse(ip), port); }
                 catch (Exception) { }
             }
-
-            Console.WriteLine("connected");
-            isConnected = true;
-            writer = new BinaryWriter(client.GetStream());
-            reader = new BinaryReader(client.GetStream());
+            Console.WriteLine(" connacted");
+            netStream = client.GetStream();
+            IsCon = true;
+            netReader = new StreamReader(netStream);
+        }
+        public void Close()
+        {
+            client.Close();
+            netStream.Close();
+            IsCon = false;
         }
 
         public string GetPath(string command)
         {
-            if (string.IsNullOrEmpty(command)) return "0";
-            string buffer = command + "\r\n";
-            writer.Write(Encoding.ASCII.GetBytes(buffer));
+            string msg = "get" + " " + command + "\r\n";
+            byte[] masse = ASCIIEncoding.ASCII.GetBytes(msg);
+            int len = masse.Length;
+            netStream.Write(masse, 0,len);
 
-            char c;
-            string line = "";
-            while ((c = reader.ReadChar()) != '\n') line += c;
-            return Parse(line);
+            string commnadLine = netReader.ReadLine().Split('\'')[1];
+            return commnadLine;
         }
 
-        public string Parse(string rawString)
-        {
-            string parsedString = "";
-            string[] values = rawString.Split('\'');
-            parsedString = values[1];
-            return parsedString;
-        }
+       
     }
 }
 
