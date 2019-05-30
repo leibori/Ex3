@@ -12,56 +12,69 @@ namespace Ex3.Models
 {
     public class Connection
     {
-        private TcpClient clientTcp;
-        private NetworkStream stream;
-        private StreamReader reader;
-        
+        TcpClient client;
+        BinaryWriter writer;
+        BinaryReader reader;
+        private TcpListener listener;
+        public bool isConnected = false;
 
-        public bool IsCon { set; get; } = false;
-
-        #region SingleTon
+        #region Singleton
         private static Connection m_Instance = null;
         public static Connection Instance
         {
             get
             {
                 if (m_Instance == null)
+                {
                     m_Instance = new Connection();
+                }
                 return m_Instance;
             }
         }
         #endregion
 
+        public void Clear()
+        {
+            m_Instance = null;
+        }
+
         public void Connect(int port, string ip)
         {
-           // IPEndPoint ipe = new IPEndPoint(IPAddress.Parse(ip), port);
-            clientTcp = new TcpClient();
-            while (!clientTcp.Connected)
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ip), port);
+            client = new TcpClient();
+
+            // We try to connect again and again util the connection is made
+            while (!client.Connected)
             {
-                try { clientTcp.Connect(IPAddress.Parse(ip),port); }
+                try { client.Connect(ep); }
                 catch (Exception) { }
             }
-            stream = clientTcp.GetStream();
-            IsCon = true;
-            reader = new StreamReader(stream);
-            Console.WriteLine("connacted");
+
+            Console.WriteLine("connected");
+            isConnected = true;
+            writer = new BinaryWriter(client.GetStream());
+            reader = new BinaryReader(client.GetStream());
         }
 
-        public string GetPath(string path)
+        public string GetPath(string command)
         {
-            string msg = "get" + " " + path + "\r\n";
-            byte[] massegeToSend = ASCIIEncoding.ASCII.GetBytes(msg);
-            stream.Write(massegeToSend, 0, massegeToSend.Length);
+            if (string.IsNullOrEmpty(command)) return "0";
+            string buffer = command + "\r\n";
+            writer.Write(Encoding.ASCII.GetBytes(buffer));
 
-            string SplitCommMess = reader.ReadLine().Split('\'')[1];
-            return SplitCommMess;
+            char c;
+            string line = "";
+            while ((c = reader.ReadChar()) != '\n') line += c;
+            return Parse(line);
         }
 
-        public void Disconnect()
+        public string Parse(string rawString)
         {
-            clientTcp.Close();
-            stream.Close();
-            IsCon = false;
+            string parsedString = "";
+            string[] values = rawString.Split('\'');
+            parsedString = values[1];
+            return parsedString;
         }
     }
 }
+
