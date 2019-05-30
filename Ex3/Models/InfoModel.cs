@@ -68,7 +68,7 @@ namespace Ex3.Models
 
             }
         }
-        public void ToXml(Information information)
+        public string ToXml(Information information)
         {
             //Initiate XML stuff
             StringBuilder sb = new StringBuilder();
@@ -83,7 +83,7 @@ namespace Ex3.Models
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Flush();
-            return;
+            return sb.ToString();
         }
     }
 }

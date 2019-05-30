@@ -16,11 +16,8 @@ namespace Ex3
             routes.MapRoute("display", "display/{param1}/{param2}/{param3}",
             defaults: new { controller = "Map", action = "display", param3 = UrlParameter.Optional });
 
-            // routes.MapRoute("display2", "display/{param1}/{param2}",
-            // defaults: new { controller = "Map", action = "display1" });
-
-            // routes.MapRoute("save", "save/{port}/{ip}/{timesPerSec}/{time}/{fileName}",
-            // defaults: new { controller = "Map", action = "save" });
+            routes.MapRoute("save", "save/{ip}/{port}/{timesPerSec}/{time}/{fileName}",
+            defaults: new { controller = "Map", action = "save" });
 
             routes.MapRoute(
                 name: "Default",

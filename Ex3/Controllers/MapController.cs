@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Ex3.Models;
 using System.Xml;
 using System.Text;
+using System.Net;
 
 namespace Ex3.Controllers
 {
@@ -16,7 +17,7 @@ namespace Ex3.Controllers
             return View();
         }
 
-        public bool isIp(string param)
+        /*public bool isIp(string param)
         {
             string[] data = param.Split('.');
             if (data.Length != 4) { return false; }
@@ -32,7 +33,7 @@ namespace Ex3.Controllers
             }
 
             return true;
-        }
+        }*/
 
         static string lonPath = "position/longitude-deg";
         static string latPath = "position/latitude-deg";
@@ -42,20 +43,20 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult display(string param1, int param2, int? param3)
         {
-            if (isIp(param1))
+            IPAddress address;
+            if (IPAddress.TryParse(param1, out address))
             {
                 Connection.Instance.Connect(param2, param1);
-                Session["lat"] = Connection.Instance.GetPath(latPath);
-                Session["lon"] = Connection.Instance.GetPath(lonPath);
+                if (Connection.Instance.IsCon) {
+                    Session["lat"] = Connection.Instance.GetPath(latPath);
+                    Session["lon"] = Connection.Instance.GetPath(lonPath);
+                }
 
-                if (param3 != null) { Session["timesPerSec"] = param3; }
+                if (param3 != null && param3 > 0) { Session["timesPerSec"] = param3; }
                 else { Session["timesPerSec"] = 0; }
             }
             else
             {
-                Connection.Instance.Connect(param2, param1);
-                ViewBag.lat = Connection.Instance.GetPath(lonPath);
-                ViewBag.lon = Connection.Instance.GetPath(latPath);
                 InfoModel.Instance.fileName = param1;
                 Session["timesPerSec"] = param2;
             }
@@ -64,19 +65,27 @@ namespace Ex3.Controllers
             return View();
         }
 
-        [HttpPost]
-        public void GetInfo()
+        [HttpGet]
+        public ActionResult save(string ip, int port, int? timesPerSec, int time, string fileName)
         {
-            // Session["lat"] = "45";  
-            Connection.Instance.GetPath(latPath);
-            // Session["lon"] = "90";  
-            Connection.Instance.GetPath(lonPath);
+            IPAddress address;
+            if (IPAddress.TryParse(ip, out address))
+            {
+                Connection.Instance.Connect(port, ip);
+                if (Connection.Instance.IsCon)
+                {
+                    Session["lat"] = Connection.Instance.GetPath(latPath);
+                    Session["lon"] = Connection.Instance.GetPath(lonPath);
+                }
 
-            return;
+                if (timesPerSec != null && timesPerSec > 0) { Session["timesPerSec"] = timesPerSec; }
+                else { Session["timesPerSec"] = 0; }
+            }
+            return View();
         }
 
         [HttpPost]
-        public void getInfoAndWrite()
+        public string GetInfo()
         {
             var info = new Information();
             info.Lat = int.Parse(Connection.Instance.GetPath(latPath));
@@ -84,10 +93,20 @@ namespace Ex3.Controllers
             info.Rudder = int.Parse(Connection.Instance.GetPath(rudderPath));
             info.Throttle = int.Parse(Connection.Instance.GetPath(throttlePath));
 
-            InfoModel.Instance.ToXml(info);
-
-            return;
+            return InfoModel.Instance.ToXml(info);
         }
+
+        /*[HttpPost]
+        public string getInfoAndWrite()
+        {
+            var info = new Information();
+            info.Lat = int.Parse(Connection.Instance.GetPath(latPath));
+            info.Lon = int.Parse(Connection.Instance.GetPath(lonPath));
+            info.Rudder = int.Parse(Connection.Instance.GetPath(rudderPath));
+            info.Throttle = int.Parse(Connection.Instance.GetPath(throttlePath));
+
+            return InfoModel.Instance.ToXml(info);
+        }*/
 
         /*private void ToXml(Information information)
         {
@@ -105,7 +124,6 @@ namespace Ex3.Controllers
             writer.WriteEndDocument();
             writer.Flush();
             return;
-        }
-        */
+        }*/
     }
 }
