@@ -60,15 +60,15 @@ namespace Ex3.Controllers
                 Session["timesPerSec"] = param2;
             }*/
 
-            Session["timesPerSec"] = 1;
+            Session["timesPerSec"] = 0;
             return View();
         }
 
         [HttpPost]
-        public void getInfo()
+        public void GetInfo()
         {
-            Session["lat"] = 45; // Connection.Instance.GetPath(latPath);
-            Session["lon"] = 90; // Connection.Instance.GetPath(lonPath);
+            Session["lat"] = "45"; // Connection.Instance.GetPath(latPath);
+            Session["lon"] = "90"; // Connection.Instance.GetPath(lonPath);
 
             return;
         }
