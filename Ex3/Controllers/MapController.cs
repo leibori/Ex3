@@ -41,19 +41,38 @@ namespace Ex3.Controllers
         static string throttlePath = "/controls/engines/current-engine/throttle";
 
         [HttpGet]
-        public ActionResult display(string param1, int param2, int? param3)
+        public ActionResult display1(string ip, int port, int timesPerSec)
         {
             IPAddress address;
-            if (IPAddress.TryParse(param1, out address))
+            if (IPAddress.TryParse(ip, out address))
             {
-                Connection.Instance.Connect(param2, param1);
+                Connection.Instance.Connect(port, ip);
                 if (Connection.Instance.IsCon) {
                     Session["lat"] = Connection.Instance.GetPath(latPath);
                     Session["lon"] = Connection.Instance.GetPath(lonPath);
                 }
 
-                if (param3 != null && param3 > 0) { Session["timesPerSec"] = param3; }
+                if (timesPerSec > 0) { Session["timesPerSec"] = timesPerSec; }
                 else { Session["timesPerSec"] = 0; }
+            }
+
+            Session["timesPerSec"] = 1;
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult display2(string param1, int param2)
+        {
+            IPAddress address;
+            if (IPAddress.TryParse(param1, out address))
+            {
+                Connection.Instance.Connect(param2, param1);
+                if (Connection.Instance.IsCon)
+                {
+                    Session["lat"] = Connection.Instance.GetPath(latPath);
+                    Session["lon"] = Connection.Instance.GetPath(lonPath);
+                }
+                Session["timesPerSec"] = 0;
             }
             else
             {
@@ -61,12 +80,12 @@ namespace Ex3.Controllers
                 Session["timesPerSec"] = param2;
             }
 
-          //  Session["timesPerSec"] = 0;
+            // Session["timesPerSec"] = 1;
             return View();
         }
 
         [HttpGet]
-        public ActionResult save(string ip, int port, int? timesPerSec, int time, string fileName)
+        public ActionResult save(string ip, int port, int timesPerSec, int time, string fileName)
         {
             IPAddress address;
             if (IPAddress.TryParse(ip, out address))
@@ -78,8 +97,11 @@ namespace Ex3.Controllers
                     Session["lon"] = Connection.Instance.GetPath(lonPath);
                 }
 
-                if (timesPerSec != null && timesPerSec > 0) { Session["timesPerSec"] = timesPerSec; }
+                if ( timesPerSec > 0) { Session["timesPerSec"] = timesPerSec; }
                 else { Session["timesPerSec"] = 0; }
+
+                Session["time"] = time;
+                InfoModel.Instance.fileName = fileName;
             }
             return View();
         }

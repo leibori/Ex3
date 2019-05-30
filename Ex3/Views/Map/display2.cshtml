@@ -6,70 +6,65 @@
 
 <html>
 <head>
-    <link href="../../Images/Style.css" rel="stylesheet" type="text/css" />
-    <title></title>
 </head>
-<body>
-    <div>
-    
-    </div>
-</body>
-</html>
+<body background="~/Images/export-map-share.png" style="background-size:cover">
+    <canvas id="page_canvas" style="width:100%; height:100%;"></canvas>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        var IntervalTime = @Session["timesPerSec"] * 1000
+        var canvas = document.getElementById("page_canvas");
+        var canvas_context = canvas.getContext("2d");
+        var image = document.getElementById("map");
+        var last_lat = null;
+        var last_lon = null;
+        var first_lat = parseFloat(@Session["lat"]);
+        var first_lon = parseFloat(@Session["lon"]);
 
-<div>
-    <canvas id="page_canvas" width="0" height="0"></canvas>
-    <img id="map" src="../../Images/export-map-share.png">
-</div>
 
-<script>
-    src = "http://code.jquery.com/jquery-1.11.0.min.js"
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas_context.fillStyle = "red";
+        canvas_context.lineWidth = "5";
+        canvas_context.strokeStyle = "red";
 
-    var IntervalTime = @Session["timesPerSec"] * 1000
-    var last_lat = null;
-    var last_lon = null;
-    var canvas = document.getElementById("page_canvas");
-    var canvas_context = canvas.getContext("2d");
-    var image = document.getElementById("map");
+        first_lat = ((first_lat + 90) / (2 * 90)) * window.innerHeight;
+        first_lon = ((first_lon + 180) / (2 * 180)) * window.innerWidth;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas_context.fillStyle = "#f00000";
-    canvas_context.lineWidth = "5";
-    canvas_context.strokeStyle = "red";
+        myTimer = (function () {
+            $.post( "@Url.Action("GetInfo")").done(function (xml) {
+                var xmlDoc = $.parseXML( xml ),
+                $xml = $( xmlDoc ),
+                lon = $xml.find("Lon").text();
+                lat = $xml.find("Lat").text();
 
-    myTimer = (function () {
-        $.post( "@Url.Action("GetInfo")").done(function (xml) {
-            var xmlDoc = $.parseXML( xml ),
-            $xml = $( xmlDoc ),
-            lon = $xml.find("Lon").text();
-            lat = $xml.find("Lat").text();
+                var lon_val = parseFloat(lon.valueOf());
+                var normalized_lon = ((lon_val + 180) / (2 * 180)) * canvas.width;
 
-            lon_val = parseFloat(lon.valueOf());
-            normalized_lon = ((lat_val + 180) / (2 * 180)) * canvas.width;
+                var lat_val = parseFloat(lat.valueOf());
+                var normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
 
-            lat_val = parseFloat(lat.valueOf());
-            normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
-
-            if (last_lat == null && last_lon == null) {
-                canvas_context.arc(normalized_lon, normalized_lat, 10, 0, 2 * Math.PI)
-                canvas_context.fill();
-            } else {
                 canvas_context.beginPath();
-                canvas_context.moveTo(last_lo, last_lat);
+                canvas_context.moveTo(last_lon, last_lat);
                 canvas_context.lineTo(normalized_lon, normalized_lat);
                 canvas_context.stroke();
-            }
 
-            last_lon = normalized_lon;
-            last_lat = normalized_lat;
+                last_lon = normalized_lon;
+                last_lat = normalized_lat;
+            });
         });
-    });
 
-    setInterval(myTimer, IntervalTime);
-    myTimer();
+        canvas_context.beginPath();
+        canvas_context.arc(first_lon, first_lat, 10, 0, 2 * Math.PI)
+        canvas_context.fill();
+        canvas_context.stroke();
 
-    window.onload = function () {
-        canvas_context.translate(0, 0);
-        ctx.drawImage(image, 0, 0, image.width, image.height);
-    };
-</script>
+        last_lon = first_lon;
+        last_lat = first_lat;
+
+        if (IntervalTime != 0) {
+            setInterval(myTimer, IntervalTime);
+        }
+    </script>
+</body>
+</html>

@@ -20,15 +20,18 @@
         var last_lon = null;
         var first_lat = parseFloat(@Session["lat"]);
         var first_lon = parseFloat(@Session["lon"]);
-
-        first_lat = ((first_lat + 90) / (2 * 90)) * canvas.height;
-        first_lon = ((first_lon + 180) / (2 * 180)) * canvas.width;
+        var time = parseInt(@Session["time"]);
+        var start = new Date().getTime();
+        var my_interval;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         canvas_context.fillStyle = "red";
         canvas_context.lineWidth = "5";
         canvas_context.strokeStyle = "red";
+
+        first_lat = ((first_lat + 90) / (2 * 90)) * canvas.height;
+        first_lon = ((first_lon + 180) / (2 * 180)) * canvas.width;
 
         myTimer = (function () {
             $.post( "@Url.Action("GetInfo")").done(function (xml) {
@@ -50,6 +53,9 @@
 
                 last_lon = normalized_lon;
                 last_lat = normalized_lat;
+
+                var end = new Date().getTime();
+                if (end - start > time) { clearInterval(my_interval); }
             });
         });
 
@@ -62,7 +68,7 @@
         last_lat = first_lat;
 
         if (IntervalTime != 0) {
-            setInterval(myTimer, IntervalTime);
+            my_interval = setInterval(myTimer, IntervalTime);
             myTimer();
         }
     </script>

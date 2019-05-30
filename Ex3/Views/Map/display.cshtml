@@ -24,12 +24,12 @@
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        first_lat = ((first_lat + 90) / (2 * 90)) * window.innerHeight;
-        first_lon = ((first_lon + 180) / (2 * 180)) * window.innerWidth;
         canvas_context.fillStyle = "red";
         canvas_context.lineWidth = "5";
         canvas_context.strokeStyle = "red";
+
+        first_lat = ((first_lat + 90) / (2 * 90)) * window.innerHeight;
+        first_lon = ((first_lon + 180) / (2 * 180)) * window.innerWidth;
 
         myTimer = (function () {
             $.post( "@Url.Action("GetInfo")").done(function (xml) {
@@ -45,7 +45,7 @@
                 var normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
 
                 canvas_context.beginPath();
-                canvas_context.moveTo(last_lo, last_lat);
+                canvas_context.moveTo(last_lon, last_lat);
                 canvas_context.lineTo(normalized_lon, normalized_lat);
                 canvas_context.stroke();
 
@@ -64,7 +64,6 @@
 
         if (IntervalTime != 0) {
             setInterval(myTimer, IntervalTime);
-            myTimer();
         }
     </script>
 </body>
