@@ -8,10 +8,10 @@ namespace Ex3.Models
 {
     public class Information
     {
-        public int Lat { get; set; }
-        public int Lon { get; set; }
-        public int Throttle { get; set; }
-        public int Rudder { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
+        public double Throttle { get; set; }
+        public double Rudder { get; set; }
 
         public void ToXml(XmlWriter writer)
         {

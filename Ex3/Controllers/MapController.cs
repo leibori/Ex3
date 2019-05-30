@@ -14,6 +14,7 @@ namespace Ex3.Controllers
     {
         public ActionResult Index()
         {
+            
             return View();
         }
 
@@ -110,25 +111,15 @@ namespace Ex3.Controllers
         public string GetInfo()
         {
             var info = new Information();
-            info.Lat = int.Parse(Connection.Instance.GetPath(latPath));
-            info.Lon = int.Parse(Connection.Instance.GetPath(lonPath));
-            info.Rudder = int.Parse(Connection.Instance.GetPath(rudderPath));
-            info.Throttle = int.Parse(Connection.Instance.GetPath(throttlePath));
+            info.Lat = double.Parse(Connection.Instance.GetPath(latPath));
+            info.Lon = double.Parse(Connection.Instance.GetPath(lonPath));
+            info.Rudder = double.Parse(Connection.Instance.GetPath(rudderPath));
+            info.Throttle = double.Parse(Connection.Instance.GetPath(throttlePath));
 
             return InfoModel.Instance.ToXml(info);
         }
 
-        /*[HttpPost]
-        public string getInfoAndWrite()
-        {
-            var info = new Information();
-            info.Lat = int.Parse(Connection.Instance.GetPath(latPath));
-            info.Lon = int.Parse(Connection.Instance.GetPath(lonPath));
-            info.Rudder = int.Parse(Connection.Instance.GetPath(rudderPath));
-            info.Throttle = int.Parse(Connection.Instance.GetPath(throttlePath));
-
-            return InfoModel.Instance.ToXml(info);
-        }*/
+       
 
         /*private void ToXml(Information information)
         {

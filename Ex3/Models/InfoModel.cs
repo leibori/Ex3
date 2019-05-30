@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Web.Mvc;
 using System.Web;
 using System.Xml;
 
@@ -37,7 +38,8 @@ namespace Ex3.Models
         {
             Information = new Information();
         }
-       
+
+       /*
         public const string SCENARIO_FILE = "~/App_Data/{0}.txt";           // The Path of the Secnario
 
         public void ReadData(string name)
@@ -47,7 +49,7 @@ namespace Ex3.Models
             {
                 /*Employee.FirstName = name;
                 Employee.LastName = name;
-                Employee.Salary = 500;*/
+                Employee.Salary = 500;
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
                 {
@@ -67,7 +69,7 @@ namespace Ex3.Models
                 Information.Throttle = int.Parse(lines[3]);
 
             }
-        }
+        }*/
         public string ToXml(Information information)
         {
             //Initiate XML stuff
@@ -85,5 +87,21 @@ namespace Ex3.Models
             writer.Flush();
             return sb.ToString();
         }
+      /*  public string dateBaseFile(Information information, HttpServerUtilityBase Server)
+        {
+            //Initiate XML stuff
+            string path = Server.MapPath("~/App_Data/" + fileName + ".xml");
+            if (System.IO.File.Exists(path)){
+                
+            }
+            System.IO.File.WriteAllText(path, information.ToXml()
+            
+
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            return sb.ToString();
+        }*/
+
     }
 }
