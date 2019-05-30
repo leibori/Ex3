@@ -21,11 +21,12 @@
         var first_lat = parseFloat(@Session["lat"]);
         var first_lon = parseFloat(@Session["lon"]);
 
-        first_lat = ((first_lat + 90) / (2 * 90)) * canvas.height;
-        first_lon = ((first_lon + 180) / (2 * 180)) * canvas.width;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        first_lat = ((first_lat + 90) / (2 * 90)) * window.innerHeight;
+        first_lon = ((first_lon + 180) / (2 * 180)) * window.innerWidth;
         canvas_context.fillStyle = "red";
         canvas_context.lineWidth = "5";
         canvas_context.strokeStyle = "red";
@@ -38,7 +39,7 @@
                 lat = $xml.find("Lat").text();
 
                 var lon_val = parseFloat(lon.valueOf());
-                var normalized_lon = ((lat_val + 180) / (2 * 180)) * canvas.width;
+                var normalized_lon = ((lon_val + 180) / (2 * 180)) * canvas.width;
 
                 var lat_val = parseFloat(lat.valueOf());
                 var normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
@@ -54,7 +55,7 @@
         });
 
         canvas_context.beginPath();
-        canvas_context.arc(first_lon, first_lon, 10, 0, 2 * Math.PI)
+        canvas_context.arc(first_lon, first_lat, 10, 0, 2 * Math.PI)
         canvas_context.fill();
         canvas_context.stroke();
 
