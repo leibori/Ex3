@@ -12,63 +12,59 @@
     <script src="../../Scripts/jquery-1.10.2.min.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
     <script>
-    var IntervalTime = @Session["timesPerSec"] * 1000
-    var last_lat = null;
-    var last_lon = null;
-    var canvas = document.getElementById("page_canvas");
-    var canvas_context = canvas.getContext("2d");
-    var image = document.getElementById("map");
+        var IntervalTime = @Session["timesPerSec"] * 1000
+        var canvas = document.getElementById("page_canvas");
+        var canvas_context = canvas.getContext("2d");
+        var image = document.getElementById("map");
+        var last_lat = null;
+        var last_lon = null;
+        var first_lat = parseFloat(@Session["lat"]);
+        var first_lon = parseFloat(@Session["lon"]);
 
+        first_lat = ((first_lat + 90) / (2 * 90)) * canvas.height;
+        first_lon = ((first_lon + 180) / (2 * 180)) * canvas.width;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas_context.fillStyle = "red";
-    canvas_context.lineWidth = "5";
-    canvas_context.strokeStyle = "red";
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas_context.fillStyle = "red";
+        canvas_context.lineWidth = "5";
+        canvas_context.strokeStyle = "red";
 
-    myTimer = (function () {
-        $.post( "@Url.Action("GetInfo")").done(function (xml) {
-            @*var xmlDoc = $.parseXML( xml ),
-            $xml = $( xmlDoc ),
-            lon = $xml.find("Lon").text();
-            lat = $xml.find("Lat").text();*@
+        myTimer = (function () {
+            $.post( "@Url.Action("GetInfo")").done(function (xml) {
+                var xmlDoc = $.parseXML( xml ),
+                $xml = $( xmlDoc ),
+                lon = $xml.find("Lon").text();
+                lat = $xml.find("Lat").text();
 
-            var lon = @Session["lon"]
-            var lat = @Session["lat"]
+                var lon_val = parseFloat(lon.valueOf());
+                var normalized_lon = ((lat_val + 180) / (2 * 180)) * canvas.width;
 
-            var lon_val = parseFloat(lon.valueOf());
-            var normalized_lon = ((lat_val + 180) / (2 * 180)) * canvas.width;
+                var lat_val = parseFloat(lat.valueOf());
+                var normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
 
-            var lat_val = parseFloat(lat.valueOf());
-            var normalized_lat = ((lat_val + 90) / (2 * 90)) * canvas.height;
-
-
-            canvas_context.beginPath();
-            canvas_context.arc(normalized_lon, normalized_lat, 10, 0, 2 * Math.PI)
-            canvas_context.fill();
-            canvas_context.stroke();
-
-            if (last_lat != null && last_lon != null) {
                 canvas_context.beginPath();
                 canvas_context.moveTo(last_lo, last_lat);
                 canvas_context.lineTo(normalized_lon, normalized_lat);
                 canvas_context.stroke();
-            }
 
-            last_lon = normalized_lon;
-            last_lat = normalized_lat;
+                last_lon = normalized_lon;
+                last_lat = normalized_lat;
+            });
         });
-    });
 
-    myTimer();
-    setInterval(myTimer, IntervalTime);
-    myTimer();
+        canvas_context.beginPath();
+        canvas_context.arc(first_lon, first_lon, 10, 0, 2 * Math.PI)
+        canvas_context.fill();
+        canvas_context.stroke();
 
-    /*window.onload = function () {
-        canvas_context.translate(0, 0);
-        ctx.drawImage(image, 0, 0, image.width, image.height);
+        last_lon = first_lon;
+        last_lat = first_lat;
 
-    };*/
+        if (IntervalTime != 0) {
+            setInterval(myTimer, IntervalTime);
+            myTimer();
+        }
     </script>
 </body>
 </html>
