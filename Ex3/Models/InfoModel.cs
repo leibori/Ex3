@@ -39,37 +39,23 @@ namespace Ex3.Models
             Information = new Information();
         }
 
-       /*
-        public const string SCENARIO_FILE = "~/App_Data/{0}.txt";           // The Path of the Secnario
+       
+        public const string SCENARIO_FILE = "~/App_Data/{0}.xml";           // The Path of the Secnario
 
-        public void ReadData(string name)
+        public void ReadDataXML(string name)
         {
             string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
             if (!File.Exists(path))
-            {
-                /*Employee.FirstName = name;
-                Employee.LastName = name;
-                Employee.Salary = 500;
-
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
-                {
-                    file.WriteLine(Information.Lat);
-                    file.WriteLine(Information.Lon);
-                    file.WriteLine(Information.Rudder);
-                    file.WriteLine(Information.Throttle);
-
-                }
-            }
+            { }
             else
             {
                 string[] lines = System.IO.File.ReadAllLines(path);        // reading all the lines of the file
-                Information.Lat = int.Parse(lines[0]);
-                Information.Lon = int.Parse(lines[1]);
-                Information.Rudder = int.Parse(lines[2]);
-                Information.Throttle = int.Parse(lines[3]);
-
+                Information.Lat = double.Parse(lines[0]);
+                Information.Lon = double.Parse(lines[1]);
+                Information.Rudder = double.Parse(lines[2]);
+                Information.Throttle = double.Parse(lines[3]);
             }
-        }*/
+        }
         public string ToXml(Information information)
         {
             //Initiate XML stuff
