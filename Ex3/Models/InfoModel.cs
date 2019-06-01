@@ -42,11 +42,11 @@ namespace Ex3.Models
        
         public const string SCENARIO_FILE = "~/App_Data/{0}.xml";           // The Path of the Secnario
 
-        public void ReadDataXML(string name)
+        public void ReadDataXML(string path)
         {
-            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
+            //string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
             if (!File.Exists(path))
-            { }
+            { }// what to add?
             else
             {
                 string[] lines = System.IO.File.ReadAllLines(path);        // reading all the lines of the file
@@ -73,21 +73,21 @@ namespace Ex3.Models
             writer.Flush();
             return sb.ToString();
         }
-      /*  public string dateBaseFile(Information information, HttpServerUtilityBase Server)
+        public void createDateBaseFile(string name)
         {
             //Initiate XML stuff
-            string path = Server.MapPath("~/App_Data/" + fileName + ".xml");
-            if (System.IO.File.Exists(path)){
-                
-            }
-            System.IO.File.WriteAllText(path, information.ToXml()
-            
+            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
+            XmlWriterSettings settings = new XmlWriterSettings();
+            XmlWriter writer = XmlWriter.Create(path, settings);
+            writer.WriteStartDocument();
+            writer.WriteStartElement("AllInformation");
+
+            Information.ToXml(writer);
 
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Flush();
-            return sb.ToString();
-        }*/
+        }
 
     }
 }
