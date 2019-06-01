@@ -78,10 +78,12 @@ namespace Ex3.Controllers
             else
             {
                 InfoModel.Instance.fileName = param1;
+                Information info = new Information();
+                InfoModel.Instance.ReadDataXML(info);
+                Session["lat"] = info.Lat;
+                Session["lon"] = info.Lon;
                 Session["timesPerSec"] = param2;
             }
-
-            // Session["timesPerSec"] = 1;
             return View();
         }
 
@@ -111,32 +113,20 @@ namespace Ex3.Controllers
         public string GetInfo()
         {
             var info = new Information();
-            info.Lat = double.Parse(Connection.Instance.GetPath(latPath));
-            info.Lon = double.Parse(Connection.Instance.GetPath(lonPath));
-            info.Rudder = double.Parse(Connection.Instance.GetPath(rudderPath));
-            info.Throttle = double.Parse(Connection.Instance.GetPath(throttlePath));
-
-            return InfoModel.Instance.ToXml(info);
+            if (Connection.Instance.IsCon)
+            {
+                info.Lat = double.Parse(Connection.Instance.GetPath(latPath));
+                info.Lon = double.Parse(Connection.Instance.GetPath(lonPath));
+                info.Rudder = double.Parse(Connection.Instance.GetPath(rudderPath));
+                info.Throttle = double.Parse(Connection.Instance.GetPath(throttlePath));
+                return InfoModel.Instance.ToXml(info);
+            }
+            else if (InfoModel.Instance.fileName != "")
+            {
+                InfoModel.Instance.ReadDataXML(info);
+                return InfoModel.Instance.createDateBaseFile(info);
+            }
+            return null;
         }
-
-       
-
-        /*private void ToXml(Information information)
-        {
-            //Initiate XML stuff
-            StringBuilder sb = new StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings();
-            XmlWriter writer = XmlWriter.Create(sb, settings);
-
-            writer.WriteStartDocument();
-            writer.WriteStartElement("AllInformation");
-
-            information.ToXml(writer);
-
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Flush();
-            return;
-        }*/
     }
 }

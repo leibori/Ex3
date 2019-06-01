@@ -26,12 +26,15 @@ namespace Ex3.Models
                 return s_instace;
             }
         }
+
+        public const string SCENARIO_FILE = "~/App_Data/{0}.xml";           // The Path of the Secnario
         public Information Information { get; private set; }
         public string fileName { get; set; }
         public string ip { get; set; }
         public int port { get; set; }
         public int time { get; set; }
         public int timesPerSec { get; set; }
+        public string Path { get; set; }
        
 
         public InfoModel()
@@ -39,21 +42,16 @@ namespace Ex3.Models
             Information = new Information();
         }
 
-       
-        public const string SCENARIO_FILE = "~/App_Data/{0}.xml";           // The Path of the Secnario
-
-        public void ReadDataXML(string path)
+        public void ReadDataXML(Information info)
         {
-            //string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
-            if (!File.Exists(path))
-            { }// what to add?
-            else
+            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, fileName));
+            if (File.Exists(path))
             {
                 string[] lines = System.IO.File.ReadAllLines(path);        // reading all the lines of the file
-                Information.Lat = double.Parse(lines[0]);
-                Information.Lon = double.Parse(lines[1]);
-                Information.Rudder = double.Parse(lines[2]);
-                Information.Throttle = double.Parse(lines[3]);
+                info.Lat = double.Parse(lines[0]);
+                info.Lon = double.Parse(lines[1]);
+                info.Rudder = double.Parse(lines[2]);
+                info.Throttle = double.Parse(lines[3]);
             }
         }
         public string ToXml(Information information)
@@ -73,10 +71,10 @@ namespace Ex3.Models
             writer.Flush();
             return sb.ToString();
         }
-        public void createDateBaseFile(string name)
+        public string createDateBaseFile(Information information)
         {
             //Initiate XML stuff
-            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, name));
+            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, fileName));
             XmlWriterSettings settings = new XmlWriterSettings();
             XmlWriter writer = XmlWriter.Create(path, settings);
             writer.WriteStartDocument();
@@ -87,7 +85,7 @@ namespace Ex3.Models
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Flush();
+            return path;
         }
-
     }
 }
