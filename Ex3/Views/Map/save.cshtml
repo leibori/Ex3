@@ -20,7 +20,7 @@
         var last_lon = null;
         var first_lat = parseFloat(@Session["lat"]);
         var first_lon = parseFloat(@Session["lon"]);
-        var time = parseInt(@Session["time"]);
+        var time = parseInt(@Session["time"]) * 1000;
         var start = new Date().getTime();
         var my_interval;
 
