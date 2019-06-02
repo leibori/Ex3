@@ -42,6 +42,9 @@ namespace Ex3.Models
                 SCENARIO_FILE = string.Format("~/App_Data/{0}.xml", value);
                 if (!File.Exists(SCENARIO_FILE))
                 {
+                    XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                    XmlElement root = doc.DocumentElement;
+                    doc.InsertBefore(xmlDeclaration, root);
                     XmlElement element = doc.CreateElement(string.Empty, "AllInformation", string.Empty);
                     doc.AppendChild(element);
                     doc.Save(SCENARIO_FILE);
