@@ -16,6 +16,7 @@ namespace Ex3.Models
         private static InfoModel s_instace = null;
         private XmlDocument doc = new XmlDocument();
         private string fileName = "";
+        private List<Information> recorded = new List<Information>();
 
         public static InfoModel Instance
         {
@@ -29,7 +30,7 @@ namespace Ex3.Models
             }
         }
 
-        public string SCENARIO_FILE = "~/App_Data/{0}.xml";           // The Path of the Secnario
+        public string SCENARIO_FILE = "";           // The Path of the Secnario
         public Information Information { get; private set; }
         public string FileName {
             get
@@ -40,15 +41,6 @@ namespace Ex3.Models
             {
                 fileName = value;
                 SCENARIO_FILE = string.Format("~/App_Data/{0}.xml", value);
-                if (!File.Exists(SCENARIO_FILE))
-                {
-                    XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-                    XmlElement root = doc.DocumentElement;
-                    doc.InsertBefore(xmlDeclaration, root);
-                    XmlElement element = doc.CreateElement(string.Empty, "AllInformation", string.Empty);
-                    doc.AppendChild(element);
-                    doc.Save(SCENARIO_FILE);
-                }
             }
         }
         public string ip { get; set; }
@@ -61,6 +53,11 @@ namespace Ex3.Models
         public InfoModel()
         {
             Information = new Information();
+        }
+
+        public void RecordInfo(Information info)
+        {
+            recorded.Add(info);
         }
 
         public void ReadDataXML(Information info)
@@ -93,23 +90,20 @@ namespace Ex3.Models
             return sb.ToString();
         }
 
-        public string createDateBaseFile(Information information)
+        public void RecordToFile()
         {
-            //Initiate XML stuff
-            //string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));
-            StringBuilder sb = new StringBuilder();
+            string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));
             XmlWriterSettings settings = new XmlWriterSettings();
-            XmlWriter writer = XmlWriter.Create(sb, settings);
+            settings.ConformanceLevel = ConformanceLevel.Fragment;
+            XmlWriter writer = XmlWriter.Create(path, settings);
 
-            writer.WriteStartDocument();
-            writer.WriteStartElement("AllInformation");
+            foreach (Information info in recorded)
+            {
+                info.ToXml(writer);
+            }
 
-            Information.ToXml(writer);
-
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
             writer.Flush();
-            return sb.ToString();
+            writer.Close();
         }
     }
 }

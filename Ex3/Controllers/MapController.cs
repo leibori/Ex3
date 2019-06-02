@@ -7,6 +7,7 @@ using Ex3.Models;
 using System.Xml;
 using System.Text;
 using System.Net;
+using System.IO;
 
 namespace Ex3.Controllers
 {
@@ -14,33 +15,15 @@ namespace Ex3.Controllers
     {
         public ActionResult Index()
         {
-            
+            string x = Directory.GetCurrentDirectory();
             return View();
         }
-
-        /*public bool isIp(string param)
-        {
-            string[] data = param.Split('.');
-            if (data.Length != 4) { return false; }
-
-             int parsedInt = 0;
-            for (int index = 0; index < 4; ++index)
-            {
-                if (int.TryParse(data[index], out parsedInt))
-                {
-                    if (parsedInt < 0 || 255 < parsedInt) { return false; }
-                }
-                else { return false; }
-            }
-
-            return true;
-        }*/
 
         static string lonPath = "position/longitude-deg";
         static string latPath = "position/latitude-deg";
         static string rudderPath = "/controls/flight/rudder";
         static string throttlePath = "/controls/engines/current-engine/throttle";
-
+        
         [HttpGet]
         public ActionResult display1(string ip, int port, int timesPerSec)
         {
@@ -121,16 +104,22 @@ namespace Ex3.Controllers
                 info.Throttle = double.Parse(Connection.Instance.GetPath(throttlePath));
                 if (InfoModel.Instance.FileName != "")
                 {
-                    return InfoModel.Instance.createDateBaseFile(info);
+                    InfoModel.Instance.RecordInfo(info);
                 }
                 return InfoModel.Instance.ToXml(info);
             }
             else if (InfoModel.Instance.FileName != "")
             {
                 InfoModel.Instance.ReadDataXML(info);
-                return InfoModel.Instance.createDateBaseFile(info);
+                return InfoModel.Instance.ToXml(info);
             }
             return null;
+        }
+
+        [HttpPost]
+        public void RecordToFile()
+        {
+            InfoModel.Instance.RecordToFile();
         }
     }
 }

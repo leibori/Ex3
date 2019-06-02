@@ -55,7 +55,10 @@
                 last_lat = normalized_lat;
 
                 var end = new Date().getTime();
-                if (end - start > time) { clearInterval(my_interval); }
+                if (end - start > time) {
+                    clearInterval(my_interval);
+                    $.post( "@Url.Action("RecordToFile")")
+                }
             });
         });
 
