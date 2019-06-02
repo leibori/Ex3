@@ -89,6 +89,7 @@ namespace Ex3.Models
             writer.Flush();
             return sb.ToString();
         }
+
         public string createDateBaseFile(Information information)
         {
             //Initiate XML stuff
