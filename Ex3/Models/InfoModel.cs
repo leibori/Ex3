@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Ex3.Models
 {
@@ -60,16 +61,23 @@ namespace Ex3.Models
             recorded.Add(info);
         }
 
-        public void ReadDataXML(Information info)
+        public void ReadDataXML()
         {
             string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));
             if (File.Exists(path))
             {
-                string[] lines = System.IO.File.ReadAllLines(path);        // reading all the lines of the file
-                info.Lat = double.Parse(lines[0]);
-                info.Lon = double.Parse(lines[1]);
-                info.Rudder = double.Parse(lines[2]);
-                info.Throttle = double.Parse(lines[3]);
+                Information info = new Information();
+                var document = XDocument.Load(path);
+                var elements = document.Root.Elements("Information");
+                // iterate through the child elements
+                foreach (XElement node in elements)
+                {
+                    info.Lat = double.Parse(document.Descendants("Lat").Single().Value);
+                    info.Lon = double.Parse(document.Descendants("Lon").Single().Value);
+                    info.Rudder = double.Parse(document.Descendants("Rudder").Single().Value);
+                    info.Throttle = double.Parse(document.Descendants("throttle").Single().Value);
+                    RecordInfo(info);
+                }
             }
         }
         public string ToXml(Information information)
