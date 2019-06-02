@@ -8,7 +8,7 @@ namespace Ex3.Models
 {
     public class Information
     {
-        private static int infoNum = 1;
+       // private static int infoNum = 1;
         public double Lat { get; set; }
         public double Lon { get; set; }
         public double Throttle { get; set; }
@@ -16,19 +16,19 @@ namespace Ex3.Models
 
         public void ToXml(XmlWriter writer)
         {
-            string title = string.Format("Information{0}", infoNum);
+            string title = "Information";
             writer.WriteStartElement(title);
             writer.WriteElementString("Lat", this.Lat.ToString());
             writer.WriteElementString("Lon", this.Lon.ToString());
             writer.WriteElementString("Throttle", this.Throttle.ToString());
             writer.WriteElementString("Rudder", this.Rudder.ToString());
             writer.WriteEndElement();
-            infoNum++;
+        //    infoNum++;
         }
 
         public void ToCachedXml(XmlDocument doc)
         {
-            string title = string.Format("Information number {0}", infoNum);
+            string title = "Information";
             XmlElement mainElement = doc.CreateElement(string.Empty, title, string.Empty);
             doc.AppendChild(mainElement);
 
@@ -52,7 +52,7 @@ namespace Ex3.Models
             rudderElement.AppendChild(rudderInfo);
             mainElement.AppendChild(rudderElement);
 
-            ++infoNum;
+           // ++infoNum;
         }
     }
 }

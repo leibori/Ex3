@@ -62,7 +62,7 @@ namespace Ex3.Controllers
             {
                 InfoModel.Instance.FileName = param1;
                 Information info = new Information();
-                InfoModel.Instance.ReadDataXML(info);
+                InfoModel.Instance.ReadDataXML();
                 Session["lat"] = info.Lat;
                 Session["lon"] = info.Lon;
                 Session["timesPerSec"] = param2;
@@ -110,7 +110,7 @@ namespace Ex3.Controllers
             }
             else if (InfoModel.Instance.FileName != "")
             {
-                InfoModel.Instance.ReadDataXML(info);
+                InfoModel.Instance.ReadDataXML();
                 return InfoModel.Instance.ToXml(info);
             }
             return null;

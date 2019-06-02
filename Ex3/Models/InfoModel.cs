@@ -66,12 +66,12 @@ namespace Ex3.Models
             string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));
             if (File.Exists(path))
             {
-                Information info = new Information();
                 var document = XDocument.Load(path);
                 var elements = document.Root.Elements("Information");
                 // iterate through the child elements
                 foreach (XElement node in elements)
                 {
+                    Information info = new Information();
                     info.Lat = double.Parse(document.Descendants("Lat").Single().Value);
                     info.Lon = double.Parse(document.Descendants("Lon").Single().Value);
                     info.Rudder = double.Parse(document.Descendants("Rudder").Single().Value);
