@@ -18,6 +18,7 @@ namespace Ex3.Models
         private XmlDocument doc = new XmlDocument();
         private string fileName = "";
         private List<Information> recorded = new List<Information>();
+        private int index = -1;
 
         public static InfoModel Instance
         {
@@ -66,12 +67,12 @@ namespace Ex3.Models
             string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));
             if (File.Exists(path))
             {
-                Information info = new Information();
                 var document = XDocument.Load(path);
                 var elements = document.Root.Elements("Information");
                 // iterate through the child elements
                 foreach (XElement node in elements)
                 {
+                    Information info = new Information();
                     info.Lat = double.Parse(document.Descendants("Lat").Single().Value);
                     info.Lon = double.Parse(document.Descendants("Lon").Single().Value);
                     info.Rudder = double.Parse(document.Descendants("Rudder").Single().Value);
@@ -79,6 +80,16 @@ namespace Ex3.Models
                     RecordInfo(info);
                 }
             }
+        }
+
+        public Information GetInformation()
+        {
+            if (recorded.Count != 0 && index + 1 < recorded.Count)
+            {
+                ++index;
+                return recorded[index];
+            }
+            return null;
         }
         public string ToXml(Information information)
         {
