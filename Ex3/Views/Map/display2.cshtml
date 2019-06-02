@@ -20,7 +20,7 @@
         var last_lon = null;
         var first_lat = parseFloat(@Session["lat"]);
         var first_lon = parseFloat(@Session["lon"]);
-
+        var stop = @Session["stop"];
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -33,6 +33,10 @@
 
         myTimer = (function () {
             $.post( "@Url.Action("GetInfo")").done(function (xml) {
+                if (stop == 1) {
+                    clearInterval(my_interval);
+                    return;
+                }
                 var xmlDoc = $.parseXML( xml ),
                 $xml = $( xmlDoc ),
                 lon = $xml.find("Lon").text();

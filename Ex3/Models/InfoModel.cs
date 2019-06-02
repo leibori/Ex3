@@ -18,6 +18,7 @@ namespace Ex3.Models
         private XmlDocument doc = new XmlDocument();
         private string fileName = "";
         private List<Information> recorded = new List<Information>();
+        private int index = -1;
 
         public static InfoModel Instance
         {
@@ -67,18 +68,28 @@ namespace Ex3.Models
             if (File.Exists(path))
             {
                 var document = XDocument.Load(path);
-                var elements = document.Root.Elements("Information");
+                var elements = document.Descendants("Information");
                 // iterate through the child elements
                 foreach (XElement node in elements)
                 {
                     Information info = new Information();
-                    info.Lat = double.Parse(document.Descendants("Lat").Single().Value);
-                    info.Lon = double.Parse(document.Descendants("Lon").Single().Value);
-                    info.Rudder = double.Parse(document.Descendants("Rudder").Single().Value);
-                    info.Throttle = double.Parse(document.Descendants("throttle").Single().Value);
+                    info.Lat = double.Parse(node.Descendants("Lat").Single().Value);
+                    info.Lon = double.Parse(node.Descendants("Lon").Single().Value);
+                    info.Rudder = double.Parse(node.Descendants("Rudder").Single().Value);
+                    info.Throttle = double.Parse(node.Descendants("Throttle").Single().Value);
                     RecordInfo(info);
                 }
             }
+        }
+
+        public Information GetInformation()
+        {
+            if (recorded.Count != 0 && index + 1 < recorded.Count)
+            {
+                ++index;
+                return recorded[index];
+            }
+            return null;
         }
         public string ToXml(Information information)
         {
@@ -105,11 +116,13 @@ namespace Ex3.Models
             settings.ConformanceLevel = ConformanceLevel.Fragment;
             XmlWriter writer = XmlWriter.Create(path, settings);
 
+            writer.WriteStartElement("AllInformation");
             foreach (Information info in recorded)
             {
                 info.ToXml(writer);
             }
-
+            writer.WriteEndElement();
+            
             writer.Flush();
             writer.Close();
         }
