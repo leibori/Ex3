@@ -68,8 +68,6 @@ namespace Ex3.Models
             string commnadLine = netReader.ReadLine().Split('\'')[1];
             return commnadLine;
         }
-
-       
     }
 }
 

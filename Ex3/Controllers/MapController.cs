@@ -77,7 +77,7 @@ namespace Ex3.Controllers
             }
             else
             {
-                InfoModel.Instance.fileName = param1;
+                InfoModel.Instance.FileName = param1;
                 Information info = new Information();
                 InfoModel.Instance.ReadDataXML(info);
                 Session["lat"] = info.Lat;
@@ -104,7 +104,7 @@ namespace Ex3.Controllers
                 else { Session["timesPerSec"] = 0; }
 
                 Session["time"] = time;
-                InfoModel.Instance.fileName = fileName;
+                InfoModel.Instance.FileName = fileName;
             }
             return View();
         }
@@ -119,9 +119,13 @@ namespace Ex3.Controllers
                 info.Lon = double.Parse(Connection.Instance.GetPath(lonPath));
                 info.Rudder = double.Parse(Connection.Instance.GetPath(rudderPath));
                 info.Throttle = double.Parse(Connection.Instance.GetPath(throttlePath));
+                if (InfoModel.Instance.FileName != "")
+                {
+                    return InfoModel.Instance.createDateBaseFile(info);
+                }
                 return InfoModel.Instance.ToXml(info);
             }
-            else if (InfoModel.Instance.fileName != "")
+            else if (InfoModel.Instance.FileName != "")
             {
                 InfoModel.Instance.ReadDataXML(info);
                 return InfoModel.Instance.createDateBaseFile(info);
