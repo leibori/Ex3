@@ -13,6 +13,7 @@ namespace Ex3.Models
         public double Throttle { get; set; }
         public double Rudder { get; set; }
 
+        // write by XML writer the information vars
         public void ToXml(XmlWriter writer)
         {
             writer.WriteStartElement("Information");
