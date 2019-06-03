@@ -50,6 +50,12 @@ namespace Ex3.Models
         public int time { get; set; }
         public int timesPerSec { get; set; }
         public string Path { get; set; }
+        public int Index {
+            set
+            {
+                index = value;
+            }
+        }
        
 
         public InfoModel()

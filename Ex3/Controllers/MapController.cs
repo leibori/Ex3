@@ -57,12 +57,14 @@ namespace Ex3.Controllers
                     Session["lon"] = Connection.Instance.GetPath(lonPath);
                 }
                 Session["timesPerSec"] = 0;
+                Session["stop"] = 1;
             }
             else
             {
                 Information info = new Information();
                 InfoModel.Instance.FileName = param1;
                 InfoModel.Instance.ReadDataXML();
+                InfoModel.Instance.Index = -1;
                 info = InfoModel.Instance.GetInformation();
                 if (info == null)
                 {
