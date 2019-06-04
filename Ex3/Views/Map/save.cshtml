@@ -34,7 +34,13 @@
         first_lon = ((first_lon + 180) / (2 * 180)) * canvas.width;
 
         myTimer = (function () {
-            $.post( "@Url.Action("GetInfo")").done(function (xml) {
+            $.post("@Url.Action("GetInfo")").done(function (xml) {
+                var end = new Date().getTime();
+                if (end - start > time) {
+                    clearInterval(my_interval);
+                    $.post( "@Url.Action("RecordToFile")")
+                }
+
                 var xmlDoc = $.parseXML( xml ),
                 $xml = $( xmlDoc ),
                 lon = $xml.find("Lon").text();
@@ -53,12 +59,6 @@
 
                 last_lon = normalized_lon;
                 last_lat = normalized_lat;
-
-                var end = new Date().getTime();
-                if (end - start > time) {
-                    clearInterval(my_interval);
-                    $.post( "@Url.Action("RecordToFile")")
-                }
             });
         });
 
@@ -72,7 +72,6 @@
 
         if (IntervalTime != 0) {
             my_interval = setInterval(myTimer, IntervalTime);
-            myTimer();
         }
     </script>
 </body>

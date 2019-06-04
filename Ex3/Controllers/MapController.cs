@@ -61,6 +61,10 @@ namespace Ex3.Controllers
             }
             else
             {
+                if (Connection.Instance.IsCon)
+                {
+                    Connection.Instance.Close();
+                }
                 Information info = new Information();
                 InfoModel.Instance.FileName = param1;
                 InfoModel.Instance.ReadDataXML();

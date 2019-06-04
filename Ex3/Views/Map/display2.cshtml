@@ -32,7 +32,8 @@
         first_lon = ((first_lon + 180) / (2 * 180)) * window.innerWidth;
 
         myTimer = (function () {
-            $.post( "@Url.Action("GetInfo")").done(function (xml) {
+            stop = @Session["stop"];
+            $.post("@Url.Action("GetInfo")").done(function (xml) {
                 if (stop == 1) {
                     clearInterval(my_interval);
                     return;
