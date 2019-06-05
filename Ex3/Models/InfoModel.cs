@@ -62,17 +62,18 @@ namespace Ex3.Models
         {
             Information = new Information();
         }
-
+        //add informtion to the list
         public void RecordInfo(Information info)
         {
             recorded.Add(info);
         }
-
+        //read from XML file
         public void ReadDataXML()
         {
             string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));
             if (File.Exists(path))
             {
+                //load file from path
                 var document = XDocument.Load(path);
                 var elements = document.Descendants("Information");
                 // iterate through the child elements
@@ -83,11 +84,12 @@ namespace Ex3.Models
                     info.Lon = double.Parse(node.Descendants("Lon").Single().Value);
                     info.Rudder = double.Parse(node.Descendants("Rudder").Single().Value);
                     info.Throttle = double.Parse(node.Descendants("Throttle").Single().Value);
+                    //add to list
                     RecordInfo(info);
                 }
             }
         }
-
+        //go throuth the list of informations
         public Information GetInformation()
         {
             if (recorded.Count != 0 && index + 1 < recorded.Count)
@@ -97,6 +99,7 @@ namespace Ex3.Models
             }
             return null;
         }
+        //write information data to XML
         public string ToXml(Information information)
         {
             //Initiate XML stuff
@@ -114,7 +117,7 @@ namespace Ex3.Models
             writer.Flush();
             return sb.ToString();
         }
-
+        //go throught elemnts to XML
         public void RecordToFile()
         {
             string path = HttpContext.Current.Server.MapPath((SCENARIO_FILE));

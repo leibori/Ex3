@@ -13,6 +13,7 @@ namespace Ex3.Controllers
 {
     public class MapController : Controller
     {
+
         public ActionResult Index()
         {
             string x = Directory.GetCurrentDirectory();
